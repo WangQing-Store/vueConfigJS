@@ -46,11 +46,11 @@ module.exports = {
         // });
     },
     configureWebpack: config => {
-        config.resolve: {
-            extensions: [".js", ".json", ".vue", ".ts"],
-        };
         // 开启 gzip 压缩
         // 需要 npm i -D compression-webpack-plugin
+        // resolve: {
+        //     extensions: ['.ts', '.tsx', '.js']
+        // };
         const plugins = [];
             if (IS_PROD) {
                 // plugins.push(
