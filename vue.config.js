@@ -15,16 +15,22 @@ module.exports = {
     // use the full build with in-browser compiler?
     // https://vuejs.org/v2/guide/installation.html#Runtime-Compiler-vs-Runtime-only
     runtimeCompiler: false,
+    pages: {
+        index: {
+            entry: "src/main.ts",
+            template: "index.html",
+        },
+    },
     // webpack配置
     // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
     chainWebpack: config => {
         config.resolve.symlinks(true); // 修复热更新失效
         // 如果使用多页面打包，使用vue inspect --plugins查看html是否在结果数组中
-        config.plugin("html").tap(args => {
-        // 修复 Lazy loading routes Error
-            args[0].chunksSortMode = "none";
-            return args;
-        });
+        // config.plugin("html").tap(args => {
+        // // 修复 Lazy loading routes Error
+        //     args[0].chunksSortMode = "none";
+        //     return args;
+        // });
         config.resolve.alias // 添加别名
         .set('@', resolve('src'))
         .set('@assets', resolve('src/assets'))
@@ -48,9 +54,6 @@ module.exports = {
     configureWebpack: config => {
         // 开启 gzip 压缩
         // 需要 npm i -D compression-webpack-plugin
-        // resolve: {
-        //     extensions: ['.ts', '.tsx', '.js']
-        // };
         const plugins = [];
             if (IS_PROD) {
                 // plugins.push(
@@ -64,31 +67,31 @@ module.exports = {
                 // );
              }
         config.plugins = [...config.plugins, ...plugins];
-        if (process.env.NODE_ENV === "production") {
-            // 为生产环境修改配置...
-            config.mode = "production";
-            // 这里修改下 
-			config.optimization.minimizer = [
-				new UglifyJsPlugin({
-					uglifyOptions: {
-						compress: {
-							warnings: false,
-							drop_console: true, //console
-							drop_debugger: true,
-							pure_funcs: ['console.log'] //移除console
-						}
-					}
-				})
-			]
-			//打包文件大小配置
-			config["performance"] = {
-				"maxEntrypointSize":10000000,
-				"maxAssetSize":30000000
-			}
-        } else {
-            // 为开发环境修改配置...
-            config.mode = "development";
-        }
+        // if (process.env.NODE_ENV === "production") {
+        //     // 为生产环境修改配置...
+        //     config.mode = "production";
+        //     // 这里修改下 
+		// 	config.optimization.minimizer = [
+		// 		new UglifyJsPlugin({
+		// 			uglifyOptions: {
+		// 				compress: {
+		// 					warnings: false,
+		// 					drop_console: true, //console
+		// 					drop_debugger: true,
+		// 					pure_funcs: ['console.log'] //移除console
+		// 				}
+		// 			}
+		// 		})
+		// 	]
+		// 	//打包文件大小配置
+		// 	config["performance"] = {
+		// 		"maxEntrypointSize":10000000,
+		// 		"maxAssetSize":30000000
+		// 	}
+        // } else {
+        //     // 为开发环境修改配置...
+        //     config.mode = "development";
+        // }
     },
     // vue-loader 配置项
     // https://vue-loader.vuejs.org/en/options.html
